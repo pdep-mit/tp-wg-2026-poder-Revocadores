@@ -1,9 +1,9 @@
 # Wollok Game: Título de juego
 
-**Grupo:** Nombre de Grupo
+**Grupo:** Revocadores
 
 **Integrantes:**
-- Nombre y Apellido
+- Federico Dimentstein
 - Nombre y Apellido
 - Nombre y Apellido
 - Nombre y Apellido
