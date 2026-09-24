@@ -1,13 +1,21 @@
 import wollok.game.*
-import example.*
+import jugadores.*
+import pelota.*
 
-program NombreDeJuego {
-	// TODO: Cambiar esto por lo que necesiten
-	game.title("Grupo: ... | Nombre de jueguito")
+program PongRevocador {
+	game.title("Revocadores | Pong Revocador")
 	game.height(10)
 	game.width(10)
 
-	game.addVisual(player)
+	game.addVisual(jugador1)
+	game.addVisual(jugador2)
+	game.addVisual(pelota)
+
+	keyboard.w().onPressDo({ jugador1.subir() })
+	keyboard.s().onPressDo({ jugador1.bajar() })
+
+	keyboard.up().onPressDo({ jugador2.subir() })
+	keyboard.down().onPressDo({ jugador2.bajar() })
 
 	game.start()
 }
