@@ -1,34 +1,39 @@
-# Wollok Game: Título de juego
+# Wollok Game: Pong Revocador
 
 **Grupo:** Revocadores
 
 **Integrantes:**
+- Alan Máximo Ramirez
+- Thiago Gabriel Salles
+- Gonzalo Agustin Ferreño
 - Federico Dimentstein
-- Nombre y Apellido
-- Nombre y Apellido
-- Nombre y Apellido
-- Nombre y Apellido
+- Lucas Di Gregorio
 
 ## Consignas
 
-Todo lo que necesitan saber está explicado en [este documento](https://docs.google.com/document/d/1KoB12RIZk_xPhmnOJ-EfLIPNwkETD_EaYMp2srDu9QY/edit?tab=t.0#heading=h.wnm2lu4cls8j). Para todo lo demás, aseguren prestar atención a los comunicados por Discord.
-
-Revisen los archivos de base y cambien lo que quieran para ajustarlo a sus necesidades. Lo primero que deberían hacer es actualizar 
-
-Recuerden que para cada checkpoint hay [expectativas mínimas](https://docs.google.com/document/d/1KoB12RIZk_xPhmnOJ-EfLIPNwkETD_EaYMp2srDu9QY/edit?tab=t.0#heading=h.56t0qdv908v3) respecto a los conceptos aplicados. Procuren:
-- Validar su idea con el equipo docente que corresponda por su canal de Discord
-- Para cada checkpoint, asegurar que implementaron lo necesario para esa instancia, y crear un **tag** en el repositorio para facilitar la comparación entre versiones final e intermedias.
-- Para la demo final, crear un nuevo tag **demo** y actualizar este README con todo lo necesario.
+Todo lo que necesitan saber está explicado en [este documento](https://docs.google.com/document/d/1KoB12RIZk_xPhmnOJ-EfLIPNwkETD_EaYMp2srDu9QY/edit?tab=t.0#heading=h.wnm2lu4cls8j).
 
 # Cómo jugar
 
 ## Objetivo
 
-TODO
+Juego de ping pong competitivo para 2 personas en tiempo real. Cada jugador controla su paleta para devolver la pelota, intentando anotar puntos evitando que pase su línea de defensa. A lo largo del partido aparecerán elementos interactivos en la cancha que alterarán la dinámica de juego.
 
 ## Controles
 
-TODO
+- **Jugador 1 (Izquierda):**
+  - `W`: Mover hacia arriba
+  - `S`: Mover hacia abajo
+- **Jugador 2 (Derecha):**
+  - `Flecha Arriba`: Mover hacia arriba
+  - `Flecha Abajo`: Mover hacia abajo
+
+## Ideas principales a desarrollar para próximos checkpoints
+
+- **Personajes / Tipos de jugador seleccionables:** Distintas clases de paletas/jugadores con estadísticas (velocidad, alcance) y habilidades especiales polimórficas activables.
+- **Power-ups y cajas en cancha:** Cajas u obstáculos que aparecen dinámicamente en el tablero y reaccionan polimórficamente al impacto de la pelota (ej. acelerar pelota, alterar trayectoria, congelar oponente, agrandar/achicar paleta).
+- **Tipos de tiro / Efectos de golpe:** Tiros normales, con efecto curvo, o remates rápidos según la interacción y el estado de la paleta.
+- **Sistema de puntaje, sets y victoria:** Contador visual de puntos y fin de partida por límite de tantos.
 
 # Explicaciones
 
