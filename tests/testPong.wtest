@@ -57,4 +57,26 @@ describe "Polimorfismo de Cajas Power-Up con la Pelota" {
     caja.aplicarEfecto(pelota)
     assert.equals(-direccionInicialY, pelota.direccionY())
   }
+
+  test "la pelota rebota verticalmente al alcanzar el limite superior" {
+    pelota.position(game.at(5, 9))
+    pelota.direccionY(1)
+    pelota.mover()
+    assert.equals(-1, pelota.direccionY())
+  }
+
+  test "jugador y cajas responden polimorficamente a colisionarConPelota" {
+    const jugador = new Jugador(position = game.at(0, 5))
+    const caja = new CajaInversora(position = game.at(5, 5))
+    
+    // Impacto con jugador invierte direccion horizontal
+    const dirXInicial = pelota.direccionX()
+    jugador.colisionarConPelota(pelota)
+    assert.equals(-dirXInicial, pelota.direccionX())
+
+    // Impacto con caja inversora invierte direccion vertical
+    const dirYInicial = pelota.direccionY()
+    caja.colisionarConPelota(pelota)
+    assert.equals(-dirYInicial, pelota.direccionY())
+  }
 }
