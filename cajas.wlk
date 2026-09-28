@@ -5,6 +5,10 @@ class CajaPowerUp {
 
   method image() = "player.png"
 
+  method colisionarConPelota(pelota) {
+    self.aplicarEfecto(pelota)
+  }
+
   method aplicarEfecto(pelota)
 }
 

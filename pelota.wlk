@@ -9,9 +9,13 @@ object pelota {
   method image() = "player.png"
 
   method mover() {
+    const proximoY = position.y() + direccionY
+    if (proximoY > 9 or proximoY < 0) {
+      self.rebotarVertical()
+    }
     position = game.at(
-      position.x() + (direccionX * velocidad),
-      position.y() + (direccionY * velocidad)
+      (position.x() + direccionX).max(0).min(9),
+      (position.y() + direccionY).max(0).min(9)
     )
   }
 

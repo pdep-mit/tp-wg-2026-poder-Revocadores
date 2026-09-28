@@ -26,6 +26,10 @@ class Jugador {
     puntos = 0
   }
 
+  method colisionarConPelota(pelota) {
+    pelota.rebotarHorizontal()
+  }
+
   method image() = "player.png"
 }
 
