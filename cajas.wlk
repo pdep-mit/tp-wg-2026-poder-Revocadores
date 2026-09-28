@@ -15,6 +15,8 @@ class CajaPowerUp {
 class CajaAceleradora inherits CajaPowerUp {
   const property incremento = 1
 
+  override method image() = "caja_acelerar.png"
+
   override method aplicarEfecto(pelota) {
     pelota.aumentarVelocidad(incremento)
   }
@@ -23,12 +25,16 @@ class CajaAceleradora inherits CajaPowerUp {
 class CajaFreno inherits CajaPowerUp {
   const property decremento = 1
 
+  override method image() = "caja_freno.png"
+
   override method aplicarEfecto(pelota) {
     pelota.reducirVelocidad(decremento)
   }
 }
 
 class CajaInversora inherits CajaPowerUp {
+  override method image() = "caja_inversora.png"
+
   override method aplicarEfecto(pelota) {
     pelota.rebotarVertical()
   }

@@ -6,7 +6,7 @@ object pelota {
   var property direccionY = 1
   var property velocidad = 1
 
-  method image() = "player.png"
+  method image() = "pelota.png"
 
   method mover() {
     const proximoY = position.y() + direccionY

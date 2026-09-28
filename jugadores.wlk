@@ -33,6 +33,10 @@ class Jugador {
   method image() = "player.png"
 }
 
-object jugador1 inherits Jugador(position = game.at(0, 4)) {}
+object jugador1 inherits Jugador(position = game.at(0, 4)) {
+  override method image() = "paleta1.png"
+}
 
-object jugador2 inherits Jugador(position = game.at(9, 4)) {}
+object jugador2 inherits Jugador(position = game.at(9, 4)) {
+  override method image() = "paleta2.png"
+}
