@@ -12,6 +12,8 @@ program PongRevocador {
 	game.addVisual(jugador1)
 	game.addVisual(jugador2)
 	game.addVisual(pelota)
+	game.addVisual(marcadorJugador1)
+	game.addVisual(marcadorJugador2)
 
 	// Cajas en cancha (polimorfismo con pelota)
 	const cajaAceleradora = new CajaAceleradora(position = game.at(4, 7), incremento = 1)

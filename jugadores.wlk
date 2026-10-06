@@ -33,10 +33,22 @@ class Jugador {
   method image() = "player.png"
 }
 
-object jugador1 inherits Jugador(position = game.at(0, 4)) {
+object jugador1 inherits Jugador(position = game.at(1, 4)) {
   override method image() = "paleta1.png"
 }
 
-object jugador2 inherits Jugador(position = game.at(9, 4)) {
+object jugador2 inherits Jugador(position = game.at(8, 4)) {
   override method image() = "paleta2.png"
+}
+
+object marcadorJugador1 {
+  var property position = game.at(1, 9)
+
+  method text() = "Puntos J1: " + jugador1.puntos().toString()
+}
+
+object marcadorJugador2 {
+  var property position = game.at(8, 9)
+
+  method text() = "Puntos J2: " + jugador2.puntos().toString()
 }
