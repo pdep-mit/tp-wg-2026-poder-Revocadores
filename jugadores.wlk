@@ -45,10 +45,14 @@ object marcadorJugador1 {
   var property position = game.at(1, 9)
 
   method text() = "Puntos J1: " + jugador1.puntos().toString()
+
+  method colisionarConPelota(pelota){}
 }
 
 object marcadorJugador2 {
   var property position = game.at(8, 9)
 
   method text() = "Puntos J2: " + jugador2.puntos().toString()
+
+  method colisionarConPelota(pelota){}
 }

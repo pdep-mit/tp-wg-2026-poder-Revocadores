@@ -8,26 +8,43 @@ program PongRevocador {
 	game.height(10)
 	game.width(10)
 
+	//Estado del juego
+	var iniciado = false
+
+    const botonJugar = object {
+        var property position = game.at(5, 4)
+        method text() = "Presiona ESPACIO para jugar"
+    }
+
 	// Visuales de jugadores y pelota
 	game.addVisual(jugador1)
 	game.addVisual(jugador2)
 	game.addVisual(pelota)
 	game.addVisual(marcadorJugador1)
 	game.addVisual(marcadorJugador2)
+	game.addVisual(botonJugar)
 
 	// Cajas en cancha (polimorfismo con pelota)
-	const cajaAceleradora = new CajaAceleradora(position = game.at(4, 7), incremento = 1)
-	const cajaInversora = new CajaInversora(position = game.at(5, 2))
-	const cajaFreno = new CajaFreno(position = game.at(5, 6), decremento = 1)
+	const cajaAceleradora = new CajaAceleradora(position = game.at(5, 7), incremento = 1)
+	const cajaInversora = new CajaInversora(position = game.at(5, 3))
+	const cajaFreno = new CajaFreno(position = game.at(6, 8), decremento = 1)
 	game.addVisual(cajaAceleradora)
 	game.addVisual(cajaInversora)
 	game.addVisual(cajaFreno)
+	game.addVisual(textovelocidad)
 
 	// Controles
-	keyboard.w().onPressDo({ jugador1.subir() })
-	keyboard.s().onPressDo({ jugador1.bajar() })
-	keyboard.up().onPressDo({ jugador2.subir() })
-	keyboard.down().onPressDo({ jugador2.bajar() })
+	keyboard.w().onPressDo({ if(iniciado) jugador1.subir() })
+	keyboard.s().onPressDo({ if(iniciado) jugador1.bajar() })
+	keyboard.up().onPressDo({ if(iniciado) jugador2.subir() })
+	keyboard.down().onPressDo({ if(iniciado) jugador2.bajar() })
+
+	keyboard.space().onPressDo({
+        if (not iniciado) {
+            iniciado = true
+            game.removeVisual(botonJugar)
+        }
+    })
 
 	// Colisiones polimorficas: cualquier elemento que choca con la pelota entiende colisionarConPelota
 	game.onCollideDo(pelota, { elemento =>
@@ -36,15 +53,17 @@ program PongRevocador {
 
 	// Bucle de juego: movimiento de pelota y chequeo de tantos
 	game.onTick(300, "moverPelota", {
-		pelota.mover()
+		if(iniciado){
+			pelota.mover()
 
-		// Verificacion de gol segun si supero la linea defensiva
-		if (pelota.position().x() == 0 and pelota.direccionX() < 0) {
-			jugador2.anotarPunto()
-			pelota.reiniciar(game.at(5, 5))
-		} else if (pelota.position().x() == 9 and pelota.direccionX() > 0) {
-			jugador1.anotarPunto()
-			pelota.reiniciar(game.at(5, 5))
+			// Verificacion de gol segun si supero la linea defensiva
+			if (pelota.position().x() == 0 and pelota.direccionX() < 0) {
+				jugador2.anotarPunto()
+				pelota.reiniciar(game.at(5, 5))
+			} else if (pelota.position().x() == 9 and pelota.direccionX() > 0) {
+				jugador1.anotarPunto()
+				pelota.reiniciar(game.at(5, 5))
+			}
 		}
 	})
 

@@ -42,3 +42,9 @@ object pelota {
     direccionY = 1
   }
 }
+
+  object textovelocidad{
+    var property position = game.at(5, 0)
+
+    method text() = "Velocidad Pelota: " + pelota.velocidad().toString()
+  }
