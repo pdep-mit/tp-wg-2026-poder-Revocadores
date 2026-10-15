@@ -4,7 +4,7 @@
 
 **Integrantes:**
 - Alan Máximo Ramirez
-- Thiago Gabriel Salles
+- Thiago Gabriel Vazquez
 - Gonzalo Agustin Ferreño
 - Federico Dimentstein
 - Lucas Di Gregorio
