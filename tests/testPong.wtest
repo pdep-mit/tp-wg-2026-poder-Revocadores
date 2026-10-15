@@ -31,7 +31,7 @@ describe "Lógica de Jugadores" {
 
 describe "Polimorfismo de Cajas Power-Up con la Pelota" {
   method initialize() {
-    pelota.reiniciar(game.at(5, 5))
+    pelota.reiniciar1(game.at(5, 5))
   }
 
   test "caja aceleradora aumenta la velocidad de la pelota" {
