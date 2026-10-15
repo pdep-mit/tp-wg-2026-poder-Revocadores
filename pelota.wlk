@@ -40,15 +40,17 @@ object pelota {
     position = posicionInicial
     velocidad = 1
     direccionX = 1
-    direccionY = 1
+    direccionY = self.direccionAleatoria()
   }
 
   method reiniciar2(posicionInicial) {
     position = posicionInicial
     velocidad = 1
     direccionX = -1
-    direccionY = 1
+    direccionY = self.direccionAleatoria()
   }
+
+  method direccionAleatoria() = [1, -1].anyOne()
 }
 
   object textovelocidad{
