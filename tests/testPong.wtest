@@ -5,7 +5,7 @@ import cajas.*
 
 describe "Lógica de Jugadores" {
   test "el jugador sube y baja su posición" {
-    const jugador = new Jugador(position = game.at(1, 4), limiteSuperior = 9, limiteInferior = 0)
+    const jugador = new Jugador(position = game.at(1, 4), limiteSuperior = 7, limiteInferior = 1)
     jugador.subir()
     assert.equals(game.at(1, 5), jugador.position())
     jugador.bajar()
@@ -13,11 +13,11 @@ describe "Lógica de Jugadores" {
   }
 
   test "el jugador no puede pasar el límite superior ni inferior" {
-    const jugador = new Jugador(position = game.at(1, 9), limiteSuperior = 9, limiteInferior = 0)
+    const jugador = new Jugador(position = game.at(1, 9), limiteSuperior = 7, limiteInferior = 1)
     jugador.subir()
     assert.equals(game.at(1, 9), jugador.position())
 
-    const jugadorBajo = new Jugador(position = game.at(1, 0), limiteSuperior = 9, limiteInferior = 0)
+    const jugadorBajo = new Jugador(position = game.at(1, 0), limiteSuperior = 7, limiteInferior = 1)
     jugadorBajo.bajar()
     assert.equals(game.at(1, 0), jugadorBajo.position())
   }
