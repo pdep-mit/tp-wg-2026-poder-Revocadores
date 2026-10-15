@@ -53,18 +53,30 @@ object config{
 
 	// Bucle de juego: movimiento de pelota y chequeo de tantos
 	game.onTick(300, "moverPelota", {
-		if(iniciado){
-			pelota.mover()
+ 	if (iniciado) {
+    pelota.mover()
 
-			// Verificacion de gol segun si supero la linea defensiva
-			if (pelota.position().x() == 0 and pelota.direccionX() < 0) {
-				jugador2.anotarPunto()
-				pelota.reiniciar2(game.at(6, 4))
-			} else if (pelota.position().x() == 12 and pelota.direccionX() > 0) {
-				jugador1.anotarPunto()
-				pelota.reiniciar1(game.at(6, 4))
-			}
-		}
-	})
+    if (pelota.position().x() == 0 and pelota.direccionX() < 0) {
+      iniciado = false
+      jugador2.anotarPunto()
+
+      pelota.reiniciar2(game.at(6, 4))
+
+      game.schedule(2000, {
+        iniciado = true
+      })
+
+    } else if (pelota.position().x() == 12 and pelota.direccionX() > 0) {
+      iniciado = false
+      jugador1.anotarPunto()
+
+      pelota.reiniciar1(game.at(6, 4))
+
+      game.schedule(500, {
+        iniciado = true
+      })
+    }
+  }
+								})
 	}
 }
