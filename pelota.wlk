@@ -1,7 +1,8 @@
 import wollok.game.*
 
+
 object pelota {
-  var property position = game.at(5, 5)
+  var property position = game.at(6, 4)
   var property direccionX = 1
   var property direccionY = 1
   var property velocidad = 1
@@ -10,12 +11,12 @@ object pelota {
 
   method mover() {
     const proximoY = position.y() + direccionY
-    if (proximoY > 9 or proximoY < 0) {
+    if (proximoY > 7 or proximoY < 1) {
       self.rebotarVertical()
     }
     position = game.at(
-      (position.x() + direccionX).max(0).min(9),
-      (position.y() + direccionY).max(0).min(9)
+      (position.x() + direccionX).max(0).min(12),
+      (position.y() + direccionY).max(0).min(8)
     )
   }
 
@@ -44,7 +45,9 @@ object pelota {
 }
 
   object textovelocidad{
-    var property position = game.at(5, 0)
+    var property position = game.at(6, 0)
 
     method text() = "Velocidad Pelota: " + pelota.velocidad().toString()
+
+    method textColor() = "FFFFFFFF"
   }

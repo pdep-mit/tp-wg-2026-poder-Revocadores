@@ -3,8 +3,8 @@ import wollok.game.*
 class Jugador {
   var property position
   var property puntos = 0
-  const property limiteSuperior = 9
-  const property limiteInferior = 0
+  const property limiteSuperior = 7
+  const property limiteInferior = 1
 
   method subir() {
     if (position.y() < limiteSuperior) {
@@ -37,22 +37,26 @@ object jugador1 inherits Jugador(position = game.at(1, 4)) {
   override method image() = "paleta1.png"
 }
 
-object jugador2 inherits Jugador(position = game.at(8, 4)) {
-  override method image() = "paleta2.png"
+object jugador2 inherits Jugador(position = game.at(11, 4)) {
+  override method image() = "paleta3.png"
 }
 
 object marcadorJugador1 {
-  var property position = game.at(1, 9)
+  var property position = game.at(1, 8)
 
   method text() = "Puntos J1: " + jugador1.puntos().toString()
+
+  method textColor() = "FFFFFFFF"
 
   method colisionarConPelota(pelota){}
 }
 
 object marcadorJugador2 {
-  var property position = game.at(8, 9)
+  var property position = game.at(11, 8)
 
   method text() = "Puntos J2: " + jugador2.puntos().toString()
 
+  method textColor() = "FFFFFFFF"
+  
   method colisionarConPelota(pelota){}
 }

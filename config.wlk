@@ -10,8 +10,10 @@ object config{
 	method configurar(){
 		
     const botonJugar = object {
-        var property position = game.at(5, 4)
+        var property position = game.at(6, 2)
         method text() = "Presiona ESPACIO para jugar"
+
+		method textColor() = "FFFFFFFF"
     }
 
 	// Visuales de jugadores y pelota
@@ -57,10 +59,10 @@ object config{
 			// Verificacion de gol segun si supero la linea defensiva
 			if (pelota.position().x() == 0 and pelota.direccionX() < 0) {
 				jugador2.anotarPunto()
-				pelota.reiniciar(game.at(5, 5))
-			} else if (pelota.position().x() == 9 and pelota.direccionX() > 0) {
+				pelota.reiniciar(game.at(6, 4))
+			} else if (pelota.position().x() == 12 and pelota.direccionX() > 0) {
 				jugador1.anotarPunto()
-				pelota.reiniciar(game.at(5, 5))
+				pelota.reiniciar(game.at(6, 4))
 			}
 		}
 	})
