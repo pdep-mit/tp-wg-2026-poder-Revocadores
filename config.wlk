@@ -59,10 +59,10 @@ object config{
 			// Verificacion de gol segun si supero la linea defensiva
 			if (pelota.position().x() == 0 and pelota.direccionX() < 0) {
 				jugador2.anotarPunto()
-				pelota.reiniciar(game.at(6, 4))
+				pelota.reiniciar2(game.at(6, 4))
 			} else if (pelota.position().x() == 12 and pelota.direccionX() > 0) {
 				jugador1.anotarPunto()
-				pelota.reiniciar(game.at(6, 4))
+				pelota.reiniciar1(game.at(6, 4))
 			}
 		}
 	})

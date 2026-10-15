@@ -36,10 +36,17 @@ object pelota {
     velocidad = (velocidad - cantidad).max(1)
   }
 
-  method reiniciar(posicionInicial) {
+  method reiniciar1(posicionInicial) {
     position = posicionInicial
     velocidad = 1
     direccionX = 1
+    direccionY = 1
+  }
+
+  method reiniciar2(posicionInicial) {
+    position = posicionInicial
+    velocidad = 1
+    direccionX = -1
     direccionY = 1
   }
 }
