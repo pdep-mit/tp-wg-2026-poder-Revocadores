@@ -99,3 +99,32 @@ describe "Polimorfismo de Cajas Power-Up con la Pelota" {
     assert.equals(-1, pelota.direccionY())
   }
 }
+
+describe "Lógica de Partida y Fin de Juego" {
+  test "jugador alcanza el límite de puntos y resulta ganador" {
+    const jugador = new Jugador(position = game.at(1, 4))
+    assert.notThat(jugador.esGanador(3))
+    jugador.anotarPunto()
+    jugador.anotarPunto()
+    jugador.anotarPunto()
+    assert.that(jugador.esGanador(3))
+  }
+
+  test "detección de pelota que sale por los laterales de la cancha" {
+    const pelotaIzquierda = new Pelota(position = game.at(0, 4), direccionX = -1)
+    assert.that(pelotaIzquierda.salioPorIzquierda())
+    assert.notThat(pelotaIzquierda.salioPorDerecha())
+
+    const pelotaDerecha = new Pelota(position = game.at(12, 4), direccionX = 1)
+    assert.that(pelotaDerecha.salioPorDerecha())
+    assert.notThat(pelotaDerecha.salioPorIzquierda())
+  }
+
+  test "la caja power-up cambia de posición tras colisionar con la pelota" {
+    const pelota = new Pelota(position = game.at(5, 5))
+    const caja = new CajaInversora(position = game.at(5, 5))
+    caja.colisionarConPelota(pelota)
+    assert.that(caja.position().x() >= 3 and caja.position().x() <= 9)
+    assert.that(caja.position().y() >= 1 and caja.position().y() <= 7)
+  }
+}
