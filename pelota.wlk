@@ -38,12 +38,22 @@ class Pelota {
   }
 
   method direccionAleatoria() = [1, -1].anyOne()
+
+  method morir() {
+    game.removeVisual(self)
+  }
+
+  method salioPorIzquierda() = position.x() <= 0 and direccionX < 0
+
+  method salioPorDerecha() = position.x() >= 12 and direccionX > 0
 }
 
-  object textovelocidad{
-    var property position = game.at(6, 0)
+object textovelocidad {
+  var property position = game.at(6, 0)
 
-    method text() = "Velocidad Pelota: " + config.pelotaActual().velocidad().toString()
+  method text() = if (config.pelotaActual() != null) "Velocidad Pelota: " + config.pelotaActual().velocidad().toString() else ""
 
-    method textColor() = "FFFFFFFF"
-  }
+  method textColor() = "FFFFFFFF"
+
+  method colisionarConPelota(pelota) {}
+}

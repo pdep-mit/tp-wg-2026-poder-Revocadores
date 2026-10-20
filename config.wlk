@@ -2,157 +2,140 @@ import wollok.game.*
 import jugadores.*
 import pelota.*
 import cajas.*
-	
-object config{
-	//Estado del juego
-	var property iniciado = false
-	var property pelotaActual = null
-	var property partidaTerminada = false
-  	var property botonJugar = null
-  	var property mensajeFinal = null
 
-	
-	method crearPelota(direccionInicial) {
-  	pelotaActual = new Pelota(
-    position = game.at(6, 4),
-    direccionX = direccionInicial,
-    direccionY = [1, -1].anyOne()
-  	)
+object config {
+  var property iniciado = false
+  var property finalizado = false
+  var property pelotaActual = null
+  const property puntosParaGanar = 5
+  const property jugadores = [jugador1, jugador2]
+  const property cajas = [
+    new CajaAceleradora(position = game.at(5, 7), incremento = 1),
+    new CajaInversora(position = game.at(5, 3)),
+    new CajaFreno(position = game.at(9, 2), decremento = 1)
+  ]
 
- 	game.addVisual(pelotaActual)
+  const cartelControles = object {
+    var property position = game.at(3, 3)
+    method text() = "J1: [W] [S]  |  J2: [Arriba] [Abajo]"
+    method textColor() = "FFFFFFFF"
+    method colisionarConPelota(pelota) {}
+  }
 
-  	game.onCollideDo(pelotaActual, { elemento =>
-    elemento.colisionarConPelota(pelotaActual)
-  	})
+  const botonJugar = object {
+    var property position = game.at(2, 2)
+    method text() = "Gana el primero a 5 pts | ESPACIO para jugar"
+    method textColor() = "FFFF00FF"
+    method colisionarConPelota(pelota) {}
+  }
 
-  	game.onCollideDo(pelotaActual, { elemento =>
-    elemento.desaparecer()
-	})
-	}
+  const cartelFinDeJuego = object {
+    var property position = game.at(2, 4)
+    var property texto = ""
+    method text() = texto
+    method textColor() = "FFFF00FF"
+    method colisionarConPelota(pelota) {}
+  }
 
-	method terminarPartida() {
+  method crearPelota(direccionInicial) {
+    pelotaActual = new Pelota(
+      position = game.at(6, 4),
+      direccionX = direccionInicial,
+      direccionY = [1, -1].anyOne()
+    )
+    game.addVisual(pelotaActual)
+
+    game.onCollideDo(pelotaActual, { elemento =>
+      elemento.colisionarConPelota(pelotaActual)
+    })
+  }
+
+  method hayGanador() = jugadores.any({ j => j.esGanador(puntosParaGanar) })
+
+  method ganador() = jugadores.find({ j => j.esGanador(puntosParaGanar) })
+
+  method terminarPartida() {
+    finalizado = true
     iniciado = false
-    partidaTerminada = true
+    cartelFinDeJuego.texto("¡Gano " + self.ganador().nombre() + "! Presiona ESPACIO o R para reiniciar")
+    game.addVisual(cartelFinDeJuego)
+  }
 
-    game.removeVisual(pelotaActual)
-
-    mensajeFinal = object {
-      var property position = game.at(6, 5)
-
-      method text() =
-        if (jugador1.puntos() >= 5)
-          "¡Gano el Jugador 1! Presiona ESPACIO para jugar devuelta"
-        else
-          "¡Gano el Jugador 2! Presiona ESPACIO para jugar devuelta"
-
-      method textColor() = "FFFF00FF"
-    }
-
-    game.addVisual(mensajeFinal)
-  	}
-
-	method reiniciarPartida() {
-    game.removeVisual(mensajeFinal)
-
-    jugador1.reiniciarPuntos()
-    jugador2.reiniciarPuntos()
-
-    partidaTerminada = false
-    
-	self.crearPelota(1)
-    game.schedule(2000, {
-    if (not partidaTerminada) {
-      iniciado = true
-    }
-  	})
-  	}
-
-	method configurar(){
-		
-    botonJugar = object {
-        var property position = game.at(6, 2)
-        method text() = "Presiona ESPACIO para jugar"
-
-		method textColor() = "FFFFFFFF"
-    }
-
-	// Visuales de jugadores y pelota
-	game.addVisual(jugador1)
-	game.addVisual(jugador2)
-	game.addVisual(marcadorJugador1)
-	game.addVisual(marcadorJugador2)
-	game.addVisual(botonJugar)
-	self.crearPelota(1)
-
-	// Cajas en cancha (polimorfismo con pelota)
-	const cajaAceleradora = new CajaAceleradora(position = game.at(5, 7), incremento = 1)
-	const cajaInversora = new CajaInversora(position = game.at(5, 3))
-	const cajaFreno = new CajaFreno(position = game.at(9, 2), decremento = 1)
-	game.addVisual(cajaAceleradora)
-	game.addVisual(cajaInversora)
-	game.addVisual(cajaFreno)
-	game.addVisual(textovelocidad)
-
-	// Controles
-	keyboard.w().onPressDo({ if(iniciado) jugador1.subir() })
-	keyboard.s().onPressDo({ if(iniciado) jugador1.bajar() })
-	keyboard.up().onPressDo({ if(iniciado) jugador2.subir() })
-	keyboard.down().onPressDo({ if(iniciado) jugador2.bajar() })
-
-	keyboard.space().onPressDo({
-  	if (partidaTerminada) {
-    self.reiniciarPartida()
-  	} else if (not iniciado) {
+  method reiniciarPartida() {
+    jugadores.forEach({ j => j.reiniciarPuntos() })
+    cajas.forEach({ c => c.reaparecer() })
+    game.removeVisual(cartelFinDeJuego)
+    finalizado = false
+    self.crearPelota(1)
     iniciado = true
-    game.removeVisual(botonJugar)
- 	 }
-	})
+  }
 
-	// Bucle de juego: movimiento de pelota y chequeo de tantos
-	 game.onTick(300, "moverPelota", {
-      if (iniciado and not partidaTerminada) {
+  method anotarPunto(jugador, direccionSaque) {
+    iniciado = false
+    jugador.anotarPunto()
+    pelotaActual.morir()
+
+    if (self.hayGanador()) {
+      self.terminarPartida()
+    } else {
+      self.crearPelota(direccionSaque)
+      game.schedule(1500, {
+        if (not finalizado) iniciado = true
+      })
+    }
+  }
+
+  method verificarGol() {
+    if (pelotaActual.salioPorIzquierda()) {
+      self.anotarPunto(jugador2, -1)
+    } else if (pelotaActual.salioPorDerecha()) {
+      self.anotarPunto(jugador1, 1)
+    }
+  }
+
+  method configurar() {
+    // Visuales estables
+    game.addVisual(jugador1)
+    game.addVisual(jugador2)
+    game.addVisual(marcadorJugador1)
+    game.addVisual(marcadorJugador2)
+    game.addVisual(botonJugar)
+    game.addVisual(cartelControles)
+    game.addVisual(textovelocidad)
+
+    // Cajas polimorficas
+    cajas.forEach({ c => game.addVisual(c) })
+
+    // Primera pelota
+    self.crearPelota(1)
+
+    // Controles de paletas
+    keyboard.w().onPressDo({ if (iniciado and not finalizado) jugador1.subir() })
+    keyboard.s().onPressDo({ if (iniciado and not finalizado) jugador1.bajar() })
+    keyboard.up().onPressDo({ if (iniciado and not finalizado) jugador2.subir() })
+    keyboard.down().onPressDo({ if (iniciado and not finalizado) jugador2.bajar() })
+
+    // Control de inicio y reinicio (acepta ESPACIO o R)
+    keyboard.space().onPressDo({
+      if (finalizado) {
+        self.reiniciarPartida()
+      } else if (not iniciado) {
+        iniciado = true
+        game.removeVisual(botonJugar)
+        game.removeVisual(cartelControles)
+      }
+    })
+
+    keyboard.r().onPressDo({
+      if (finalizado) self.reiniciarPartida()
+    })
+
+    // Bucle de juego: movimiento de pelota y chequeo de tantos sin if anidado procedural
+    game.onTick(300, "moverPelota", {
+      if (iniciado and not finalizado) {
         pelotaActual.mover()
-
-        if (pelotaActual.position().x() == 0 and
-            pelotaActual.direccionX() < 0) {
-
-          iniciado = false
-          jugador2.anotarPunto()
-
-          if (jugador2.puntos() >= 5) {
-            self.terminarPartida()
-          } else {
-            game.removeVisual(pelotaActual)
-            self.crearPelota(-1)
-
-            game.schedule(1000, {
-              if (not partidaTerminada) {
-                iniciado = true
-              }
-            })
-          }
-
-        } else if (pelotaActual.position().x() == 12 and
-                   pelotaActual.direccionX() > 0) {
-
-          iniciado = false
-          jugador1.anotarPunto()
-
-          if (jugador1.puntos() >= 5) {
-            self.terminarPartida()
-          } else {
-            game.removeVisual(pelotaActual)
-            self.crearPelota(1)
-
-            game.schedule(1000, {
-              if (not partidaTerminada) {
-                iniciado = true
-              }
-            })
-          }
-        }
+        self.verificarGol()
       }
     })
   }
 }
-
