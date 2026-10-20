@@ -29,16 +29,14 @@ class Jugador {
   method colisionarConPelota(pelota) {
     pelota.rebotarHorizontal()
   }
-
-  method image() = "player.png"
 }
 
 object jugador1 inherits Jugador(position = game.at(1, 4)) {
-  override method image() = "paleta1.png"
+  method image() = "paleta1.png"
 }
 
 object jugador2 inherits Jugador(position = game.at(11, 4)) {
-  override method image() = "paleta3.png"
+  method image() = "paleta3.png"
 }
 
 object marcadorJugador1 {

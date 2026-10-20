@@ -27,7 +27,7 @@ object config{
 	// Cajas en cancha (polimorfismo con pelota)
 	const cajaAceleradora = new CajaAceleradora(position = game.at(5, 7), incremento = 1)
 	const cajaInversora = new CajaInversora(position = game.at(5, 3))
-	const cajaFreno = new CajaFreno(position = game.at(6, 8), decremento = 1)
+	const cajaFreno = new CajaFreno(position = game.at(9, 2), decremento = 1)
 	game.addVisual(cajaAceleradora)
 	game.addVisual(cajaInversora)
 	game.addVisual(cajaFreno)
