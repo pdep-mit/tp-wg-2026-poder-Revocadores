@@ -30,16 +30,14 @@ class Jugador {
     pelota.rebotarHorizontal()
   }
 
-  method esGanador(limite) = puntos >= limite
+  method desaparecer(){}
 }
 
 object jugador1 inherits Jugador(position = game.at(1, 4)) {
-  method nombre() = "Jugador 1"
   method image() = "paleta1.png"
 }
 
 object jugador2 inherits Jugador(position = game.at(11, 4)) {
-  method nombre() = "Jugador 2"
   method image() = "paleta3.png"
 }
 
