@@ -9,7 +9,7 @@ class CajaPowerUp {
   }
 
   method posicionAleatoria(){
-    const nuevoX = (1 .. game.width() - 2).anyOne()
+    const nuevoX = (2 .. game.width() - 3).anyOne()
     const nuevoY = (1 .. game.height() - 2).anyOne()
     return game.at(nuevoX, nuevoY)
   }

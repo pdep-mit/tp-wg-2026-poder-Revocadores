@@ -45,7 +45,7 @@ object config{
         else
           "¡Gano el Jugador 2! Presiona ESPACIO para jugar devuelta"
 
-      method textColor() = "FFFF00FF"
+      method textColor() = "FFFFFF"
     }
 
     game.addVisual(mensajeFinal)
