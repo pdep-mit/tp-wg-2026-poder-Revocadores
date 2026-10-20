@@ -1,7 +1,8 @@
 import wollok.game.*
+import config.*
 
 
-object pelota {
+class Pelota {
   var property position = game.at(6, 4)
   var property direccionX = 1
   var property direccionY = 1
@@ -36,27 +37,13 @@ object pelota {
     velocidad = (velocidad - cantidad).max(1)
   }
 
-  method reiniciar1(posicionInicial) {
-    position = posicionInicial
-    velocidad = 1
-    direccionX = 1
-    direccionY = self.direccionAleatoria()
-  }
-
-  method reiniciar2(posicionInicial) {
-    position = posicionInicial
-    velocidad = 1
-    direccionX = -1
-    direccionY = self.direccionAleatoria()
-  }
-
   method direccionAleatoria() = [1, -1].anyOne()
 }
 
   object textovelocidad{
     var property position = game.at(6, 0)
 
-    method text() = "Velocidad Pelota: " + pelota.velocidad().toString()
+    method text() = "Velocidad Pelota: " + config.pelotaActual().velocidad().toString()
 
     method textColor() = "FFFFFFFF"
   }

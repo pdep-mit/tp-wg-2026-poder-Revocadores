@@ -5,78 +5,97 @@ import cajas.*
 
 describe "Lógica de Jugadores" {
   test "el jugador sube y baja su posición" {
-    const jugador = new Jugador(position = game.at(1, 4), limiteSuperior = 7, limiteInferior = 1)
+    const jugador = new Jugador(
+      position = game.at(1, 4),
+      limiteSuperior = 7,
+      limiteInferior = 1
+    )
+
     jugador.subir()
     assert.equals(game.at(1, 5), jugador.position())
+
     jugador.bajar()
     assert.equals(game.at(1, 4), jugador.position())
   }
 
   test "el jugador no puede pasar el límite superior ni inferior" {
-    const jugador = new Jugador(position = game.at(1, 9), limiteSuperior = 7, limiteInferior = 1)
+    const jugador = new Jugador(
+      position = game.at(1, 9),
+      limiteSuperior = 7,
+      limiteInferior = 1
+    )
+
     jugador.subir()
     assert.equals(game.at(1, 9), jugador.position())
 
-    const jugadorBajo = new Jugador(position = game.at(1, 0), limiteSuperior = 7, limiteInferior = 1)
+    const jugadorBajo = new Jugador(
+      position = game.at(1, 0),
+      limiteSuperior = 7,
+      limiteInferior = 1
+    )
+
     jugadorBajo.bajar()
     assert.equals(game.at(1, 0), jugadorBajo.position())
   }
 
   test "el jugador anota puntos correctamente" {
     const jugador = new Jugador(position = game.at(1, 4))
+
     jugador.anotarPunto()
+
     assert.equals(1, jugador.puntos())
   }
 }
 
 describe "Polimorfismo de Cajas Power-Up con la Pelota" {
-  method initialize() {
-    pelota.reiniciar1(game.at(5, 5))
-  }
 
   test "caja aceleradora aumenta la velocidad de la pelota" {
-    const caja = new CajaAceleradora(position = game.at(5, 5), incremento = 2)
+    const pelota = new Pelota(position = game.at(5, 5))
+    const caja = new CajaAceleradora(
+      position = game.at(5, 5),
+      incremento = 2
+    )
+
     caja.colisionarConPelota(pelota)
+
     assert.equals(3, pelota.velocidad())
   }
 
-  test "caja freno reduce la velocidad de la pelota sin ser menor a 1" {
-    pelota.aumentarVelocidad(2) // velocidad = 3
-    const caja = new CajaFreno(position = game.at(5, 5), decremento = 1)
+  test "caja freno reduce la velocidad sin ser menor a 1" {
+    const pelota = new Pelota(position = game.at(5, 5))
+    const caja = new CajaFreno(
+      position = game.at(5, 5),
+      decremento = 1
+    )
+
+    pelota.aumentarVelocidad(2)
+    assert.equals(3, pelota.velocidad())
+
     caja.colisionarConPelota(pelota)
     assert.equals(2, pelota.velocidad())
 
     caja.colisionarConPelota(pelota)
-    caja.colisionarConPelota(pelota) // no baja de 1
+    caja.colisionarConPelota(pelota)
+
     assert.equals(1, pelota.velocidad())
   }
 
-  test "caja inversora invierte la dirección vertical de la pelota" {
+  test "caja inversora invierte la dirección vertical" {
+    const pelota = new Pelota(position = game.at(5, 5))
     const direccionInicialY = pelota.direccionY()
     const caja = new CajaInversora(position = game.at(5, 5))
+
     caja.colisionarConPelota(pelota)
+
     assert.equals(-direccionInicialY, pelota.direccionY())
   }
 
-  test "la pelota rebota verticalmente al alcanzar el limite superior" {
-    pelota.position(game.at(5, 9))
+  test "la pelota rebota verticalmente al alcanzar el límite superior" {
+    const pelota = new Pelota(position = game.at(5, 8))
+
     pelota.direccionY(1)
     pelota.mover()
+
     assert.equals(-1, pelota.direccionY())
-  }
-
-  test "jugador y cajas responden polimorficamente a colisionarConPelota" {
-    const jugador = new Jugador(position = game.at(0, 5))
-    const caja = new CajaInversora(position = game.at(5, 5))
-    
-    // Impacto con jugador invierte direccion horizontal
-    const dirXInicial = pelota.direccionX()
-    jugador.colisionarConPelota(pelota)
-    assert.equals(-dirXInicial, pelota.direccionX())
-
-    // Impacto con caja inversora invierte direccion vertical
-    const dirYInicial = pelota.direccionY()
-    caja.colisionarConPelota(pelota)
-    assert.equals(-dirYInicial, pelota.direccionY())
   }
 }

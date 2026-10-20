@@ -6,6 +6,25 @@ import cajas.*
 object config{
 	//Estado del juego
 	var property iniciado = false
+	var property pelotaActual = null
+	
+	method crearPelota(direccionInicial) {
+  	pelotaActual = new Pelota(
+    position = game.at(6, 4),
+    direccionX = direccionInicial,
+    direccionY = [1, -1].anyOne()
+  	)
+
+ 	game.addVisual(pelotaActual)
+
+  	game.onCollideDo(pelotaActual, { elemento =>
+    elemento.colisionarConPelota(pelotaActual)
+  	})
+
+  	game.onCollideDo(pelotaActual, { elemento =>
+    elemento.desaparecer()
+	})
+	}
 
 	method configurar(){
 		
@@ -19,10 +38,10 @@ object config{
 	// Visuales de jugadores y pelota
 	game.addVisual(jugador1)
 	game.addVisual(jugador2)
-	game.addVisual(pelota)
 	game.addVisual(marcadorJugador1)
 	game.addVisual(marcadorJugador2)
 	game.addVisual(botonJugar)
+	self.crearPelota(1)
 
 	// Cajas en cancha (polimorfismo con pelota)
 	const cajaAceleradora = new CajaAceleradora(position = game.at(5, 7), incremento = 1)
@@ -46,39 +65,37 @@ object config{
         }
     })
 
-	// Colisiones polimorficas: cualquier elemento que choca con la pelota entiende colisionarConPelota
-	game.onCollideDo(pelota, { elemento =>
-		elemento.colisionarConPelota(pelota)
-	})
-
-	game.onCollideDo(pelota, { elemento => elemento.desaparecer()})
-
 	// Bucle de juego: movimiento de pelota y chequeo de tantos
-	game.onTick(300, "moverPelota", {
- 	if (iniciado) {
-    pelota.mover()
+	 game.onTick(300, "moverPelota", {
+      if (iniciado) {
+        pelotaActual.mover()
 
-    if (pelota.position().x() == 0 and pelota.direccionX() < 0) {
-      iniciado = false
-      jugador2.anotarPunto()
+        if (pelotaActual.position().x() == 0 and
+            pelotaActual.direccionX() < 0) {
+          iniciado = false
+          jugador2.anotarPunto()
 
-      pelota.reiniciar2(game.at(6, 4))
+          game.removeVisual(pelotaActual)
+          self.crearPelota(-1)
 
-      game.schedule(2000, {
-        iniciado = true
-      })
+          game.schedule(2000, {
+            iniciado = true
+          })
 
-    } else if (pelota.position().x() == 12 and pelota.direccionX() > 0) {
-      iniciado = false
-      jugador1.anotarPunto()
+        } else if (pelotaActual.position().x() == 12 and
+                   pelotaActual.direccionX() > 0) {
+          iniciado = false
+          jugador1.anotarPunto()
 
-      pelota.reiniciar1(game.at(6, 4))
+          game.removeVisual(pelotaActual)
+          self.crearPelota(1)
 
-      game.schedule(500, {
-        iniciado = true
-      })
-    }
+          game.schedule(2000, {
+            iniciado = true
+          })
+        }
+      }
+    })
   }
-								})
-	}
 }
+
