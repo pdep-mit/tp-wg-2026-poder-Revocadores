@@ -36,25 +36,25 @@ describe "Polimorfismo de Cajas Power-Up con la Pelota" {
 
   test "caja aceleradora aumenta la velocidad de la pelota" {
     const caja = new CajaAceleradora(position = game.at(5, 5), incremento = 2)
-    caja.aplicarEfecto(pelota)
+    caja.colisionarConPelota(pelota)
     assert.equals(3, pelota.velocidad())
   }
 
   test "caja freno reduce la velocidad de la pelota sin ser menor a 1" {
     pelota.aumentarVelocidad(2) // velocidad = 3
     const caja = new CajaFreno(position = game.at(5, 5), decremento = 1)
-    caja.aplicarEfecto(pelota)
+    caja.colisionarConPelota(pelota)
     assert.equals(2, pelota.velocidad())
 
-    caja.aplicarEfecto(pelota)
-    caja.aplicarEfecto(pelota) // no baja de 1
+    caja.colisionarConPelota(pelota)
+    caja.colisionarConPelota(pelota) // no baja de 1
     assert.equals(1, pelota.velocidad())
   }
 
   test "caja inversora invierte la dirección vertical de la pelota" {
     const direccionInicialY = pelota.direccionY()
     const caja = new CajaInversora(position = game.at(5, 5))
-    caja.aplicarEfecto(pelota)
+    caja.colisionarConPelota(pelota)
     assert.equals(-direccionInicialY, pelota.direccionY())
   }
 

@@ -51,6 +51,8 @@ object config{
 		elemento.colisionarConPelota(pelota)
 	})
 
+	game.onCollideDo(pelota, { elemento => elemento.desaparecer()})
+
 	// Bucle de juego: movimiento de pelota y chequeo de tantos
 	game.onTick(300, "moverPelota", {
  	if (iniciado) {
