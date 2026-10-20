@@ -48,7 +48,6 @@ object marcadorJugador1 {
 
   method textColor() = "FFFFFFFF"
 
-  method colisionarConPelota(pelota){}
 }
 
 object marcadorJugador2 {
@@ -58,5 +57,4 @@ object marcadorJugador2 {
 
   method textColor() = "FFFFFFFF"
   
-  method colisionarConPelota(pelota){}
 }

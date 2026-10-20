@@ -7,6 +7,10 @@ object config{
 	//Estado del juego
 	var property iniciado = false
 	var property pelotaActual = null
+	var property partidaTerminada = false
+  	var property botonJugar = null
+  	var property mensajeFinal = null
+
 	
 	method crearPelota(direccionInicial) {
   	pelotaActual = new Pelota(
@@ -26,9 +30,46 @@ object config{
 	})
 	}
 
+	method terminarPartida() {
+    iniciado = false
+    partidaTerminada = true
+
+    game.removeVisual(pelotaActual)
+
+    mensajeFinal = object {
+      var property position = game.at(6, 5)
+
+      method text() =
+        if (jugador1.puntos() >= 5)
+          "¡Gano el Jugador 1! Presiona ESPACIO para jugar devuelta"
+        else
+          "¡Gano el Jugador 2! Presiona ESPACIO para jugar devuelta"
+
+      method textColor() = "FFFF00FF"
+    }
+
+    game.addVisual(mensajeFinal)
+  	}
+
+	method reiniciarPartida() {
+    game.removeVisual(mensajeFinal)
+
+    jugador1.reiniciarPuntos()
+    jugador2.reiniciarPuntos()
+
+    partidaTerminada = false
+    
+	self.crearPelota(1)
+    game.schedule(2000, {
+    if (not partidaTerminada) {
+      iniciado = true
+    }
+  	})
+  	}
+
 	method configurar(){
 		
-    const botonJugar = object {
+    botonJugar = object {
         var property position = game.at(6, 2)
         method text() = "Presiona ESPACIO para jugar"
 
@@ -59,40 +100,56 @@ object config{
 	keyboard.down().onPressDo({ if(iniciado) jugador2.bajar() })
 
 	keyboard.space().onPressDo({
-        if (not iniciado) {
-            iniciado = true
-            game.removeVisual(botonJugar)
-        }
-    })
+  	if (partidaTerminada) {
+    self.reiniciarPartida()
+  	} else if (not iniciado) {
+    iniciado = true
+    game.removeVisual(botonJugar)
+ 	 }
+	})
 
 	// Bucle de juego: movimiento de pelota y chequeo de tantos
 	 game.onTick(300, "moverPelota", {
-      if (iniciado) {
+      if (iniciado and not partidaTerminada) {
         pelotaActual.mover()
 
         if (pelotaActual.position().x() == 0 and
             pelotaActual.direccionX() < 0) {
+
           iniciado = false
           jugador2.anotarPunto()
 
-          game.removeVisual(pelotaActual)
-          self.crearPelota(-1)
+          if (jugador2.puntos() >= 5) {
+            self.terminarPartida()
+          } else {
+            game.removeVisual(pelotaActual)
+            self.crearPelota(-1)
 
-          game.schedule(2000, {
-            iniciado = true
-          })
+            game.schedule(1000, {
+              if (not partidaTerminada) {
+                iniciado = true
+              }
+            })
+          }
 
         } else if (pelotaActual.position().x() == 12 and
                    pelotaActual.direccionX() > 0) {
+
           iniciado = false
           jugador1.anotarPunto()
 
-          game.removeVisual(pelotaActual)
-          self.crearPelota(1)
+          if (jugador1.puntos() >= 5) {
+            self.terminarPartida()
+          } else {
+            game.removeVisual(pelotaActual)
+            self.crearPelota(1)
 
-          game.schedule(2000, {
-            iniciado = true
-          })
+            game.schedule(1000, {
+              if (not partidaTerminada) {
+                iniciado = true
+              }
+            })
+          }
         }
       }
     })
