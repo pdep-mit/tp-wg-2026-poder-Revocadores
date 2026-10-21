@@ -3,10 +3,10 @@ import config.*
 
 
 class Pelota {
-  var property position = game.at(6, 4)
-  var property direccionX = 1
-  var property direccionY = 1
-  var property velocidad = 1
+  var property position
+  var property direccionX
+  var property direccionY
+  var property velocidad
 
   method image() = "pelota.png"
 

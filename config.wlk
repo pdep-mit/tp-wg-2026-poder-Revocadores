@@ -39,7 +39,6 @@ object config{
 
             game.schedule(1000, {
               if (not partidaTerminada) {
-                iniciado = true
                 self.iniciarJuego()
               }
             })
@@ -57,7 +56,6 @@ object config{
 
             game.schedule(1000, {
               if (not partidaTerminada) {
-                iniciado = true
                 self.iniciarJuego()
               }
             })
@@ -69,7 +67,8 @@ object config{
   	pelotaActual = new Pelota(
     position = game.at(6, 4),
     direccionX = direccionInicial,
-    direccionY = [1, -1].anyOne()
+    direccionY = [1, -1].anyOne(),
+    velocidad = 1
   	)
 
  	game.addVisual(pelotaActual)
@@ -108,9 +107,6 @@ object config{
     
 	self.crearPelota(1)
     game.schedule(2000, {
-    if (not partidaTerminada) {
-      iniciado = true
-    }
     self.iniciarJuego()
   	})
   	}
@@ -132,9 +128,9 @@ object config{
 	self.crearPelota(1)
 
 	// Cajas en cancha (polimorfismo con pelota)
-	const cajaAceleradora = new CajaAceleradora(position = game.at(5, 7), incremento = 1)
+	const cajaAceleradora = new CajaAceleradora(position = game.at(8, 2), incremento = 1)
 	const cajaInversora = new CajaInversora(position = game.at(5, 3))
-	const cajaFreno = new CajaFreno(position = game.at(9, 2), decremento = 1)
+	const cajaFreno = new CajaFreno(position = game.at(7, 7), decremento = 1)
 	game.addVisual(cajaAceleradora)
 	game.addVisual(cajaInversora)
 	game.addVisual(cajaFreno)

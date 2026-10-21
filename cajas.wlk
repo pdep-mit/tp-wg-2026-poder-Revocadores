@@ -5,7 +5,9 @@ class CajaPowerUp {
 
   method colisionarConPelota(pelota){
     game.removeVisual(self)
+    game.schedule(3000, {
     self.instanciarCaja()
+    })
   }
 
   method posicionAleatoria(){
