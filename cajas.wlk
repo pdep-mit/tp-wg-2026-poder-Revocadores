@@ -3,7 +3,7 @@ import wollok.game.*
 class CajaPowerUp {
   var property position
 
-  method desaparecer(){
+  method colisionarConPelota(pelota){
     game.removeVisual(self)
     self.instanciarCaja()
   }
@@ -22,8 +22,9 @@ class CajaAceleradora inherits CajaPowerUp {
 
   method image() = "caja_acelerar.png"
 
-  method colisionarConPelota(pelota) {
+  override method colisionarConPelota(pelota) {
     pelota.aumentarVelocidad(incremento)
+    super(pelota)
   }
 
   override method instanciarCaja(){
@@ -37,8 +38,9 @@ class CajaFreno inherits CajaPowerUp {
 
   method image() = "caja_freno.png"
 
-  method colisionarConPelota(pelota) {
+  override method colisionarConPelota(pelota) {
     pelota.reducirVelocidad(decremento)
+    super(pelota)
   }
 
   override method instanciarCaja(){
@@ -50,8 +52,9 @@ class CajaFreno inherits CajaPowerUp {
 class CajaInversora inherits CajaPowerUp {
   method image() = "caja_inversora.png"
 
-  method colisionarConPelota(pelota) {
+  override method colisionarConPelota(pelota) {
     pelota.rebotarVertical()
+    super(pelota)
   }
 
   override method instanciarCaja(){

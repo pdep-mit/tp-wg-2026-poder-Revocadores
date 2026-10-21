@@ -8,10 +8,63 @@ object config{
 	var property iniciado = false
 	var property pelotaActual = null
 	var property partidaTerminada = false
-  	var property botonJugar = null
-  	var property mensajeFinal = null
+  var property botonJugar = null
+  var property mensajeFinal = null
 
-	
+	method iniciarJuego(){
+    iniciado = true
+    partidaTerminada = false
+
+    game.onTick(300, "moverPelota", {
+        pelotaActual.mover()
+        self.chequearPuntos()
+    })  
+  }
+
+  method pausarJuego(){
+    iniciado = false
+    game.removeTickEvent("moverPelota")
+  }
+
+  method chequearPuntos(){
+    if (pelotaActual.salioPorIzquierda()) {
+        iniciado = false
+        jugador2.anotarPunto()
+        self.pausarJuego()
+        if (jugador2.puntos() >= 5) {
+            self.terminarPartida()
+          } else {
+            game.removeVisual(pelotaActual)
+            self.crearPelota(-1)
+
+            game.schedule(1000, {
+              if (not partidaTerminada) {
+                iniciado = true
+                self.iniciarJuego()
+              }
+            })
+          }
+
+    } else if (pelotaActual.salioPorDerecha()) {
+        iniciado = false
+        jugador1.anotarPunto()
+        self.pausarJuego()
+        if (jugador1.puntos() >= 5) {
+            self.terminarPartida()
+          } else {
+            game.removeVisual(pelotaActual)
+            self.crearPelota(1)
+
+            game.schedule(1000, {
+              if (not partidaTerminada) {
+                iniciado = true
+                self.iniciarJuego()
+              }
+            })
+          }
+    }
+  }
+
 	method crearPelota(direccionInicial) {
   	pelotaActual = new Pelota(
     position = game.at(6, 4),
@@ -24,16 +77,12 @@ object config{
   	game.onCollideDo(pelotaActual, { elemento =>
     elemento.colisionarConPelota(pelotaActual)
   	})
-
-  	game.onCollideDo(pelotaActual, { elemento =>
-    elemento.desaparecer()
-	})
 	}
 
 	method terminarPartida() {
     iniciado = false
     partidaTerminada = true
-
+    game.removeTickEvent("moverPelota")
     game.removeVisual(pelotaActual)
 
     mensajeFinal = object {
@@ -56,24 +105,22 @@ object config{
 
     jugador1.reiniciarPuntos()
     jugador2.reiniciarPuntos()
-
-    partidaTerminada = false
     
 	self.crearPelota(1)
     game.schedule(2000, {
     if (not partidaTerminada) {
       iniciado = true
     }
+    self.iniciarJuego()
   	})
   	}
 
 	method configurar(){
-		
     botonJugar = object {
         var property position = game.at(6, 2)
         method text() = "Presiona ESPACIO para jugar"
 
-		method textColor() = "FFFFFFFF"
+		method textColor() = "FFFFFF"
     }
 
 	// Visuales de jugadores y pelota
@@ -101,58 +148,11 @@ object config{
 
 	keyboard.space().onPressDo({
   	if (partidaTerminada) {
-    self.reiniciarPartida()
+      self.reiniciarPartida()
   	} else if (not iniciado) {
-    iniciado = true
-    game.removeVisual(botonJugar)
+      self.iniciarJuego()
+      game.removeVisual(botonJugar)
  	 }
 	})
-
-	// Bucle de juego: movimiento de pelota y chequeo de tantos
-	 game.onTick(300, "moverPelota", {
-      if (iniciado and not partidaTerminada) {
-        pelotaActual.mover()
-
-        if (pelotaActual.position().x() == 0 and
-            pelotaActual.direccionX() < 0) {
-
-          iniciado = false
-          jugador2.anotarPunto()
-
-          if (jugador2.puntos() >= 5) {
-            self.terminarPartida()
-          } else {
-            game.removeVisual(pelotaActual)
-            self.crearPelota(-1)
-
-            game.schedule(1000, {
-              if (not partidaTerminada) {
-                iniciado = true
-              }
-            })
-          }
-
-        } else if (pelotaActual.position().x() == 12 and
-                   pelotaActual.direccionX() > 0) {
-
-          iniciado = false
-          jugador1.anotarPunto()
-
-          if (jugador1.puntos() >= 5) {
-            self.terminarPartida()
-          } else {
-            game.removeVisual(pelotaActual)
-            self.crearPelota(1)
-
-            game.schedule(1000, {
-              if (not partidaTerminada) {
-                iniciado = true
-              }
-            })
-          }
-        }
-      }
-    })
   }
 }
-

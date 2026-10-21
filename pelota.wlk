@@ -38,6 +38,14 @@ class Pelota {
   }
 
   method direccionAleatoria() = [1, -1].anyOne()
+
+  method salioPorIzquierda(){
+    return position.x() <= 0
+  }
+
+  method salioPorDerecha(){
+    return position.x() >= 12
+  }
 }
 
   object textovelocidad{

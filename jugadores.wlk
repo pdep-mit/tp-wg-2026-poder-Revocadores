@@ -29,8 +29,6 @@ class Jugador {
   method colisionarConPelota(pelota) {
     pelota.rebotarHorizontal()
   }
-
-  method desaparecer(){}
 }
 
 object jugador1 inherits Jugador(position = game.at(1, 4)) {
