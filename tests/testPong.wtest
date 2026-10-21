@@ -50,7 +50,7 @@ describe "Lógica de Jugadores" {
 describe "Polimorfismo de Cajas Power-Up con la Pelota" {
 
   test "caja aceleradora aumenta la velocidad de la pelota" {
-    const pelota = new Pelota(position = game.at(5, 5))
+    const pelota = new Pelota(position = game.at(5, 5), direccionX = 1, direccionY = 1, velocidad = 1)
     const caja = new CajaAceleradora(
       position = game.at(5, 5),
       incremento = 2
@@ -62,7 +62,7 @@ describe "Polimorfismo de Cajas Power-Up con la Pelota" {
   }
 
   test "caja freno reduce la velocidad sin ser menor a 1" {
-    const pelota = new Pelota(position = game.at(5, 5))
+    const pelota = new Pelota(position = game.at(5, 5), direccionX = 1, direccionY = 1, velocidad = 1)
     const caja = new CajaFreno(
       position = game.at(5, 5),
       decremento = 1
@@ -81,7 +81,7 @@ describe "Polimorfismo de Cajas Power-Up con la Pelota" {
   }
 
   test "caja inversora invierte la dirección vertical" {
-    const pelota = new Pelota(position = game.at(5, 5))
+    const pelota = new Pelota(position = game.at(5, 5), direccionX = 1, direccionY = 1, velocidad = 1)
     const direccionInicialY = pelota.direccionY()
     const caja = new CajaInversora(position = game.at(5, 5))
 
@@ -91,7 +91,7 @@ describe "Polimorfismo de Cajas Power-Up con la Pelota" {
   }
 
   test "la pelota rebota verticalmente al alcanzar el límite superior" {
-    const pelota = new Pelota(position = game.at(5, 8))
+    const pelota = new Pelota(position = game.at(5, 8), direccionX = 1, direccionY = 1, velocidad = 1)
 
     pelota.direccionY(1)
     pelota.mover()
