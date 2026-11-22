@@ -1,8 +1,9 @@
+import limites.*
 import wollok.game.*
 import jugadores.*
 import pelota.*
 import cajas.*
-	
+
 object config{
 	//Estado del juego
 	var property iniciado = false
@@ -17,7 +18,6 @@ object config{
 
     game.onTick(300, "moverPelota", {
         pelotaActual.mover()
-        self.chequearPuntos()
     })  
   }
 
@@ -26,12 +26,8 @@ object config{
     game.removeTickEvent("moverPelota")
   }
 
-  method chequearPuntos(){
-    if (pelotaActual.salioPorIzquierda()) {
-        iniciado = false
-        jugador2.anotarPunto()
-        self.pausarJuego()
-        if (jugador2.puntos() >= 5) {
+  method chequearPuntos(jugador){
+        if (jugador.puntos() >= 5) {
             self.terminarPartida()
           } else {
             game.removeVisual(pelotaActual)
@@ -43,25 +39,15 @@ object config{
               }
             })
           }
-
-    } else if (pelotaActual.salioPorDerecha()) {
-        iniciado = false
-        jugador1.anotarPunto()
-        self.pausarJuego()
-        if (jugador1.puntos() >= 5) {
-            self.terminarPartida()
-          } else {
-            game.removeVisual(pelotaActual)
-            self.crearPelota(1)
-
-            game.schedule(1000, {
-              if (not partidaTerminada) {
-                self.iniciarJuego()
-              }
-            })
-          }
-    }
   }
+
+  method crearLimites(){
+        (0..9).forEach { y =>
+            game.addVisual(new LimiteIzquierdo(position = game.at(0, y)))
+            game.addVisual(new LimiteDerecho(position = game.at(12, y)))
+        }
+  }
+  
 
 	method crearPelota(direccionInicial) {
   	pelotaActual = new Pelota(
@@ -141,6 +127,8 @@ object config{
 	keyboard.s().onPressDo({ if(iniciado) jugador1.bajar() })
 	keyboard.up().onPressDo({ if(iniciado) jugador2.subir() })
 	keyboard.down().onPressDo({ if(iniciado) jugador2.bajar() })
+
+  self.crearLimites()
 
 	keyboard.space().onPressDo({
   	if (partidaTerminada) {

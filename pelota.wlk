@@ -11,13 +11,15 @@ class Pelota {
   method image() = "pelota.png"
 
   method mover() {
-    const proximoY = position.y() + direccionY
-    if (proximoY > 7 or proximoY < 1) {
+    const proximoX = position.x() + (direccionX * velocidad)
+    const proximoY = position.y() + (direccionY * velocidad)
+
+    if (proximoY >= 7 or proximoY <= 1) {
       self.rebotarVertical()
     }
     position = game.at(
-      (position.x() + direccionX).max(0).min(12),
-      (position.y() + direccionY).max(0).min(8)
+      proximoX.max(0).min(12),
+      proximoY.max(1).min(7)
     )
   }
 
@@ -38,14 +40,6 @@ class Pelota {
   }
 
   method direccionAleatoria() = [1, -1].anyOne()
-
-  method salioPorIzquierda(){
-    return position.x() <= 0
-  }
-
-  method salioPorDerecha(){
-    return position.x() >= 12
-  }
 }
 
   object textovelocidad{
