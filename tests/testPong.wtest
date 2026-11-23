@@ -45,6 +45,7 @@ describe "Lógica de Jugadores" {
 
     assert.equals(1, jugador.puntos())
   }
+
 }
 
 describe "Polimorfismo de Cajas Power-Up con la Pelota" {

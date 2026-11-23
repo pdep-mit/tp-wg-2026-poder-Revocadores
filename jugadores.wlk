@@ -31,11 +31,32 @@ class Jugador {
   }
 }
 
+class JugadorMaquina inherits Jugador {
+  var tiempoDecision = 0
+  
+ method seguiPelota(pelota) {
+
+  tiempoDecision += 100
+
+  if (tiempoDecision >= 300) {
+
+    tiempoDecision = 0
+
+    if (pelota.position().y() > position.y()) {
+      self.subir()
+    } else if (pelota.position().y() < position.y()) {
+      self.bajar()
+    }
+  }
+}
+
+}
+
 object jugador1 inherits Jugador(position = game.at(1, 4)) {
   method image() = "paleta1.png"
 }
 
-object jugador2 inherits Jugador(position = game.at(11, 4)) {
+object jugador2 inherits JugadorMaquina(position = game.at(11, 4)) {
   method image() = "paleta3.png"
 }
 

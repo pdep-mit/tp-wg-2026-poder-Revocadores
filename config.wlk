@@ -11,15 +11,25 @@ object config{
 	var property partidaTerminada = false
   var property botonJugar = null
   var property mensajeFinal = null
+  var property modoMaquina = false
 
 	method iniciarJuego(){
     iniciado = true
     partidaTerminada = false
 
-    game.onTick(300, "moverPelota", {
-        pelotaActual.mover()
+    game.onTick(100, "moverPelota", {
+       self.actualizarJuego()
     })  
   }
+
+ method actualizarJuego() {
+
+  administradorDePelotas.moverTodas()
+
+  if (modoMaquina) {
+    jugador2.seguiPelota(pelotaActual)
+  }
+}
 
   method pausarJuego(){
     iniciado = false
@@ -27,14 +37,23 @@ object config{
   }
 
   method chequearPuntos(jugador){
+
+         if (iniciado) {
+            self.pausarJuego()}
+
         if (jugador.puntos() >= 5) {
             self.terminarPartida()
           } else {
-            game.removeVisual(pelotaActual)
-            self.crearPelota(-1)
+                 administradorDePelotas.eliminarTodas()
+                  var direccionInicial = -1 
 
+              if (jugador == jugador1) {
+                direccionInicial = 1 
+
+              }
             game.schedule(1000, {
               if (not partidaTerminada) {
+                  self.crearPelota(direccionInicial)
                 self.iniciarJuego()
               }
             })
@@ -48,27 +67,18 @@ object config{
         }
   }
   
+method crearPelota(direccionInicial) {
 
-	method crearPelota(direccionInicial) {
-  	pelotaActual = new Pelota(
-    position = game.at(6, 4),
-    direccionX = direccionInicial,
-    direccionY = [1, -1].anyOne(),
-    velocidad = 1
-  	)
-
- 	game.addVisual(pelotaActual)
-
-  	game.onCollideDo(pelotaActual, { elemento =>
-    elemento.colisionarConPelota(pelotaActual)
-  	})
-	}
-
+  pelotaActual = fabricanteDePelotas.crearPelota(direccionInicial)
+     administradorDePelotas.agregar(pelotaActual)
+     }
+	 
 	method terminarPartida() {
     iniciado = false
     partidaTerminada = true
     game.removeTickEvent("moverPelota")
-    game.removeVisual(pelotaActual)
+    administradorDePelotas.eliminarTodas()
+
 
     mensajeFinal = object {
       var property position = game.at(6, 5)
@@ -87,21 +97,27 @@ object config{
 
 	method reiniciarPartida() {
     game.removeVisual(mensajeFinal)
-
+   
     jugador1.reiniciarPuntos()
     jugador2.reiniciarPuntos()
-    
+    administradorDePelotas.eliminarTodas()
 	self.crearPelota(1)
     game.schedule(2000, {
     self.iniciarJuego()
   	})
   	}
 
+method alternarModo() {
+
+    if (not iniciado and not partidaTerminada) {
+      modoMaquina = not modoMaquina
+    }
+  }
+
 	method configurar(){
     botonJugar = object {
         var property position = game.at(6, 2)
-        method text() = "Presiona ESPACIO para jugar"
-
+        method text() = "Presiona ESPACIO para jugar| M: cambiar modo"
 		method textColor() = "FFFFFF"
     }
 
@@ -117,16 +133,20 @@ object config{
 	const cajaAceleradora = new CajaAceleradora(position = game.at(8, 2), incremento = 1)
 	const cajaInversora = new CajaInversora(position = game.at(5, 3))
 	const cajaFreno = new CajaFreno(position = game.at(7, 7), decremento = 1)
+  const cajaDuplicadora = new CajaDuplicadora(position = game.at(4, 6))
 	game.addVisual(cajaAceleradora)
 	game.addVisual(cajaInversora)
 	game.addVisual(cajaFreno)
+  game.addVisual(cajaDuplicadora)
 	game.addVisual(textovelocidad)
 
 	// Controles
 	keyboard.w().onPressDo({ if(iniciado) jugador1.subir() })
 	keyboard.s().onPressDo({ if(iniciado) jugador1.bajar() })
-	keyboard.up().onPressDo({ if(iniciado) jugador2.subir() })
-	keyboard.down().onPressDo({ if(iniciado) jugador2.bajar() })
+  keyboard.m().onPressDo({if (not iniciado and not partidaTerminada) { modoMaquina = not modoMaquina}}) //para juagr contra la maquina 
+	keyboard.up().onPressDo({ if(iniciado and not modoMaquina) jugador2.subir() })
+	keyboard.down().onPressDo({ if(iniciado and not modoMaquina ) jugador2.bajar() })
+  
 
   self.crearLimites()
 

@@ -27,6 +27,8 @@ Juego de ping pong competitivo para 2 personas en tiempo real. Cada jugador cont
 - **Jugador 2 (Derecha):**
   - `Flecha Arriba`: Mover hacia arriba
   - `Flecha Abajo`: Mover hacia abajo
+    - **Jugar contra la maquina**
+    -  `M` : Activa el modo jugar contra la maquina
 
 ## Ideas principales a desarrollar para próximos checkpoints
 
