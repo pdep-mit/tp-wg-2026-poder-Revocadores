@@ -1,10 +1,13 @@
 import wollok.game.*
+import config.*
 
 class Jugador {
   var property position
   var property puntos = 0
   const property limiteSuperior = 7
   const property limiteInferior = 1
+  const property nombre
+  const property direccionSaque
 
   method subir() {
     if (position.y() < limiteSuperior) {
@@ -18,6 +21,14 @@ class Jugador {
     }
   }
 
+  method moverManualArriba() {
+    self.subir()
+  }
+
+  method moverManualAbajo() {
+    self.bajar()
+  }
+
   method anotarPunto() {
     puntos += 1
   }
@@ -26,54 +37,64 @@ class Jugador {
     puntos = 0
   }
 
+  method gano() = puntos >= 5
+
+  method actualizarEnTick(pelota) {}
+
   method colisionarConPelota(pelota) {
+    game.sound("rebote.wav").play()
     pelota.rebotarHorizontal()
   }
 }
 
 class JugadorMaquina inherits Jugador {
   var tiempoDecision = 0
-  
- method seguiPelota(pelota) {
 
-  tiempoDecision += 100
-
-  if (tiempoDecision >= 300) {
-
-    tiempoDecision = 0
-
-    if (pelota.position().y() > position.y()) {
-      self.subir()
-    } else if (pelota.position().y() < position.y()) {
-      self.bajar()
+  override method actualizarEnTick(pelota) {
+    if (pelota != null) {
+      tiempoDecision += 100
+      if (tiempoDecision >= 300) {
+        tiempoDecision = 0
+        if (pelota.position().y() > position.y()) {
+          self.subir()
+        } else if (pelota.position().y() < position.y()) {
+          self.bajar()
+        }
+      }
     }
   }
+
+  override method moverManualArriba() {}
+
+  override method moverManualAbajo() {}
 }
 
-}
-
-object jugador1 inherits Jugador(position = game.at(1, 4)) {
+object jugador1 inherits Jugador(position = game.at(1, 4), nombre = "Jugador 1", direccionSaque = 1) {
   method image() = "paleta1.png"
 }
 
-object jugador2 inherits JugadorMaquina(position = game.at(11, 4)) {
+object jugador2Humano inherits Jugador(position = game.at(11, 4), nombre = "Jugador 2", direccionSaque = -1) {
   method image() = "paleta3.png"
+  method siguienteRival() = jugador2Bot
 }
 
-object marcadorJugador1 {
-  var property position = game.at(1, 8)
+object jugador2Bot inherits JugadorMaquina(position = game.at(11, 4), nombre = "la Máquina", direccionSaque = -1) {
+  method image() = "paleta3.png"
+  method siguienteRival() = jugador2Humano
+}
 
-  method text() = "Puntos J1: " + jugador1.puntos().toString()
+class Marcador {
+  var property position
+  const proveedorJugador
+
+  method text() {
+    const jugador = proveedorJugador.apply()
+    return jugador.nombre() + ": " + jugador.puntos().toString()
+  }
 
   method textColor() = "FFFFFFFF"
-
 }
 
-object marcadorJugador2 {
-  var property position = game.at(11, 8)
+object marcadorJugador1 inherits Marcador(position = game.at(1, 8), proveedorJugador = { jugador1 }) {}
 
-  method text() = "Puntos J2: " + jugador2.puntos().toString()
-
-  method textColor() = "FFFFFFFF"
-  
-}
+object marcadorJugador2 inherits Marcador(position = game.at(11, 8), proveedorJugador = { config.rival() }) {}

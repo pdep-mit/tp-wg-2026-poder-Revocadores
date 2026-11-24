@@ -4,88 +4,39 @@ import wollok.game.*
 class CajaPowerUp {
   var property position
 
-  method colisionarConPelota(pelota){
-
-      self.aplicarEfecto(pelota)
-
-    
+  method colisionarConPelota(pelota) {
+    game.sound("powerup.wav").play()
+    self.aplicarEfecto(pelota)
     game.removeVisual(self)
-
     game.schedule(3000, {
-    self.instanciarCaja()
+      self.reaparecer()
     })
   }
 
-  method posicionAleatoria(){
+  method reaparecer() {
+    game.addVisual(self.crearEn(self.posicionAleatoria()))
+  }
+
+  method posicionAleatoria() {
     const nuevoX = (2 .. game.width() - 3).anyOne()
     const nuevoY = (1 .. game.height() - 2).anyOne()
     return game.at(nuevoX, nuevoY)
   }
- method aplicarEfecto(pelota)
-  method instanciarCaja()
+
+  method aplicarEfecto(pelota)
+  method crearEn(posicion)
 }
-
-object fabricaCajas {
-
-  method crearAceleradora(posicion, incremento) {
-
-    const nuevaCaja = new CajaAceleradora(
-      position = posicion,
-      incremento = incremento
-    )
-
-    game.addVisual(nuevaCaja)
-  }
-
-
-  method crearFreno(posicion, decremento) {
-
-    const nuevaCaja = new CajaFreno(
-      position = posicion,
-      decremento = decremento
-    )
-
-    game.addVisual(nuevaCaja)
-  }
-
-
-  method crearInversora(posicion) {
-
-    const nuevaCaja = new CajaInversora(
-      position = posicion
-    )
-
-    game.addVisual(nuevaCaja)
-  }
-
-
-  // Nueva fábrica para la caja duplicadora.
-  method crearDuplicadora(posicion) {
-
-    const nuevaCaja = new CajaDuplicadora(
-      position = posicion
-    )
-
-    game.addVisual(nuevaCaja)
-  }
-}
-
 
 class CajaAceleradora inherits CajaPowerUp {
   const property incremento = 1
 
   method image() = "caja_acelerar.png"
 
-   override method aplicarEfecto(pelota) {
+  override method aplicarEfecto(pelota) {
     pelota.aumentarVelocidad(incremento)
   }
 
-  override method instanciarCaja(){
-     fabricaCajas.crearAceleradora(
-      self.posicionAleatoria(),
-      incremento
-    )
-  }
+  override method crearEn(posicion) = new CajaAceleradora(position = posicion, incremento = incremento)
 }
 
 class CajaFreno inherits CajaPowerUp {
@@ -93,16 +44,11 @@ class CajaFreno inherits CajaPowerUp {
 
   method image() = "caja_freno.png"
 
-    override method aplicarEfecto(pelota) {
+  override method aplicarEfecto(pelota) {
     pelota.reducirVelocidad(decremento)
   }
 
-  override method instanciarCaja(){
-     fabricaCajas.crearFreno(
-      self.posicionAleatoria(),
-      decremento
-    )
-  }
+  override method crearEn(posicion) = new CajaFreno(position = posicion, decremento = decremento)
 }
 
 class CajaInversora inherits CajaPowerUp {
@@ -112,28 +58,15 @@ class CajaInversora inherits CajaPowerUp {
     pelota.rebotarVertical()
   }
 
- override method instanciarCaja() {
-  fabricaCajas.crearInversora(
-    self.posicionAleatoria()
-  )
-}
+  override method crearEn(posicion) = new CajaInversora(position = posicion)
 }
 
 class CajaDuplicadora inherits CajaPowerUp {
-
-method image() = "caja_duplicadora.png"
+  method image() = "caja_duplicadora.png"
 
   override method aplicarEfecto(pelota) {
-
     administradorDePelotas.duplicar(pelota)
   }
 
-
-  override method instanciarCaja() {
-
-    fabricaCajas.crearDuplicadora(
-      self.posicionAleatoria()
-    )
-  }
-
+  override method crearEn(posicion) = new CajaDuplicadora(position = posicion)
 }

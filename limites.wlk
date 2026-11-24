@@ -15,8 +15,8 @@ class Limite{
 }
 class LimiteIzquierdo inherits Limite{
     override method darPunto(){
-        jugador2.anotarPunto()
-        config.chequearPuntos(jugador2)
+        config.rival().anotarPunto()
+        config.chequearPuntos(config.rival())
     }
 }
 
