@@ -1,12 +1,40 @@
 import pelota.*
 import wollok.game.*
 
+object administradorDeCajas {
+  const cajas = []
+
+  method agregar(caja) {
+    cajas.add(caja)
+    game.addVisual(caja)
+  }
+
+  method remover(caja) {
+    if (cajas.contains(caja)) {
+      cajas.remove(caja)
+    }
+  }
+
+  method verificarColisiones(pelota) {
+    cajas.copy().forEach { caja =>
+      if (caja.estaEnHitbox(pelota)) {
+        caja.colisionarConPelota(pelota)
+      }
+    }
+  }
+}
+
 class CajaPowerUp {
   var property position
+
+  method estaEnHitbox(pelota) =
+    (position.x() - pelota.position().x()).abs() <= 1 and
+    (position.y() - pelota.position().y()).abs() <= 1
 
   method colisionarConPelota(pelota) {
     game.sound("powerup.wav").play()
     self.aplicarEfecto(pelota)
+    administradorDeCajas.remover(self)
     game.removeVisual(self)
     game.schedule(3000, {
       self.reaparecer()
@@ -14,7 +42,7 @@ class CajaPowerUp {
   }
 
   method reaparecer() {
-    game.addVisual(self.crearEn(self.posicionAleatoria()))
+    administradorDeCajas.agregar(self.crearEn(self.posicionAleatoria()))
   }
 
   method posicionAleatoria() {

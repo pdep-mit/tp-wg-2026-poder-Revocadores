@@ -70,7 +70,7 @@ describe "Lógica de Jugadores" {
     assert.equals(game.at(11, 4), bot.position())
   }
 
-  test "JugadorMaquina sigue la pelota cada 300ms e ignora pelota null" {
+  test "JugadorMaquina sigue la pelota cada 150ms e ignora pelota null" {
     const bot = new JugadorMaquina(
       position = game.at(11, 4),
       nombre = "la Máquina",
@@ -153,5 +153,15 @@ describe "Polimorfismo de Cajas Power-Up con la Pelota" {
     caja.colisionarConPelota(pelota)
 
     assert.equals(cantidadInicial + 1, game.allVisuals().size())
+  }
+
+  test "caja power-up activa su efecto con hitbox ampliada de 3x3" {
+    const pelota = new Pelota(position = game.at(4, 4), direccionX = 1, direccionY = 1, velocidad = 1)
+    const caja = new CajaAceleradora(position = game.at(5, 5), incremento = 1)
+    administradorDeCajas.agregar(caja)
+
+    administradorDeCajas.verificarColisiones(pelota)
+
+    assert.equals(2, pelota.velocidad())
   }
 }

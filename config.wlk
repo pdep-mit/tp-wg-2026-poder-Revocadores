@@ -16,13 +16,14 @@ object config {
     iniciado = true
     partidaTerminada = false
 
-    game.onTick(100, "moverPelota", {
+    game.onTick(50, "moverPelota", {
       self.actualizarJuego()
     })
   }
 
   method actualizarJuego() {
     administradorDePelotas.moverTodas()
+    administradorDePelotas.verificarColisiones(administradorDeCajas)
     rival.actualizarEnTick(administradorDePelotas.pelotaPrincipal())
   }
 
@@ -117,10 +118,10 @@ object config {
     const cajaInversora = new CajaInversora(position = game.at(5, 3))
     const cajaFreno = new CajaFreno(position = game.at(7, 7), decremento = 1)
     const cajaDuplicadora = new CajaDuplicadora(position = game.at(4, 6))
-    game.addVisual(cajaAceleradora)
-    game.addVisual(cajaInversora)
-    game.addVisual(cajaFreno)
-    game.addVisual(cajaDuplicadora)
+    administradorDeCajas.agregar(cajaAceleradora)
+    administradorDeCajas.agregar(cajaInversora)
+    administradorDeCajas.agregar(cajaFreno)
+    administradorDeCajas.agregar(cajaDuplicadora)
     game.addVisual(textovelocidad)
 
     // Controles

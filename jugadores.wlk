@@ -52,8 +52,8 @@ class JugadorMaquina inherits Jugador {
 
   override method actualizarEnTick(pelota) {
     if (pelota != null) {
-      tiempoDecision += 100
-      if (tiempoDecision >= 300) {
+      tiempoDecision += 50
+      if (tiempoDecision >= 150) {
         tiempoDecision = 0
         if (pelota.position().y() > position.y()) {
           self.subir()

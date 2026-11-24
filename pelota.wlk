@@ -10,8 +10,8 @@ class Pelota {
   method image() = "pelota.png"
 
   method moverSegunVelocidad() {
-    tiempoAcumulado += 100
-    const intervaloMovimiento = 400 - (velocidad * 100)
+    tiempoAcumulado += 50
+    const intervaloMovimiento = 250 - (velocidad * 50)
 
     if (tiempoAcumulado >= intervaloMovimiento) {
       tiempoAcumulado = 0
@@ -98,6 +98,12 @@ object administradorDePelotas {
   method moverTodas() {
     pelotas.forEach { pelota =>
       pelota.moverSegunVelocidad()
+    }
+  }
+
+  method verificarColisiones(administradorCajas) {
+    pelotas.forEach { pelota =>
+      administradorCajas.verificarColisiones(pelota)
     }
   }
 
