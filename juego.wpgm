@@ -5,9 +5,8 @@ program PongRevocador {
 	game.title("Revocadores | Pong Revocador")
 	game.height(9)
 	game.width(13)
-
-	game.boardGround("cancha.png")
-	config.configurar()
+	
+	config.mostrarPantallaInicio()
 
 	game.start()
 }

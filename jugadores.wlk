@@ -78,7 +78,7 @@ object jugador2Humano inherits Jugador(position = game.at(11, 4), nombre = "Juga
   method siguienteRival() = jugador2Bot
 }
 
-object jugador2Bot inherits JugadorMaquina(position = game.at(11, 4), nombre = "la Máquina", direccionSaque = -1) {
+object jugador2Bot inherits JugadorMaquina(position = game.at(11, 4), nombre = "Bot", direccionSaque = -1) {
   method image() = "paleta3.png"
   method siguienteRival() = jugador2Humano
 }

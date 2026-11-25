@@ -12,9 +12,17 @@ object administradorDeCajas {
   method remover(caja) {
     if (cajas.contains(caja)) {
       cajas.remove(caja)
+      game.removeVisual(caja)
     }
   }
 
+  method eliminarCajas() {
+    cajas.forEach { caja =>
+      game.removeVisual(caja)
+    }
+    cajas.clear()
+  }
+  
   method verificarColisiones(pelota) {
     cajas.copy().forEach { caja =>
       if (caja.estaEnHitbox(pelota)) {
