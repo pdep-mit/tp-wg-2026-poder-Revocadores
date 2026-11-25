@@ -6,9 +6,10 @@ class Limite{
     var property position
 
     method colisionarConPelota(pelota){
-        config.iniciado(false)
-        config.pausarJuego()
-        self.darPunto()
+        if (config.iniciado()) {
+            config.pausarJuego()
+            self.darPunto()
+        }
     }
 
     method darPunto(){}

@@ -24,10 +24,6 @@ object gestorPantallas {
     game.addVisual(fondoInicio)
   }
 
-  method mostrarCancha() {
-    self.limpiar()
-  }
-
   method mostrarVictoria(ganador) {
     self.limpiar()
     
