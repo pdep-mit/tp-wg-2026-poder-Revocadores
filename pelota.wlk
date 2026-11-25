@@ -9,11 +9,12 @@ class Pelota {
 
   method image() = "pelota.png"
 
+  method intervaloMovimiento() = 250 - (velocidad * 50)
+
   method moverSegunVelocidad() {
     tiempoAcumulado += 50
-    const intervaloMovimiento = 250 - (velocidad * 50)
 
-    if (tiempoAcumulado >= intervaloMovimiento) {
+    if (tiempoAcumulado >= self.intervaloMovimiento()) {
       tiempoAcumulado = 0
       self.mover()
     }
@@ -76,8 +77,9 @@ object fabricanteDePelotas {
     return new Pelota(
       position = pelotaOriginal.position(),
       direccionX = pelotaOriginal.direccionX(),
-      direccionY = -pelotaOriginal.direccionY(),
-      velocidad = pelotaOriginal.velocidad()
+      direccionY = pelotaOriginal.direccionY(),
+      velocidad = pelotaOriginal.velocidad(),
+      tiempoAcumulado = -pelotaOriginal.intervaloMovimiento()
     )
   }
 }
